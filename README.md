@@ -10,6 +10,7 @@ $ cd ~/Battlecode2014
 $ git init
 $ git remote add chrisdembia git@github.com:chrisdembia/battlecode2014.git
 $ git fetch chrisdembia
+$ git pull chrisdembia master
 ```
 
 This assumes you've installed Battlecode2014 to `~/Battlecode2014`. Modify as necessary.
