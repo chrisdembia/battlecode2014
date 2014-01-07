@@ -14,6 +14,7 @@ MethodCosts.txt
 build.xml
 version.txt
 bc.conf
+teams/examplefuncsplayer
 
 *.class
 
