@@ -3,6 +3,8 @@
  */
 package team139.controller;
 
+import java.util.Random;
+
 import team139.model.Model;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
@@ -19,10 +21,13 @@ public abstract class Controller {
 	protected final RobotController rc;
 	protected final Model model;
 	protected final int END_TURN_BYTECODE_USE = 0;
+	// TODO why did I make this static and the others final?
+	protected static Random rand;
 
 	public Controller(RobotController rc) {
 		this.rc = rc;
 		this.model = new Model(rc);
+		rand = new Random();
 	}
 	
 	public final void run() {
