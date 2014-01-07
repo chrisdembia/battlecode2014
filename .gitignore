@@ -1,3 +1,20 @@
+# Battlecode installation
+.installationinformation
+Uninstaller
+art
+bin
+doc
+lib
+maps
+music
+sound
+AllowedPackages.txt
+DisallowedClasses.txt
+MethodCosts.txt
+build.xml
+version.txt
+bc.conf
+
 *.class
 
 # Package Files #
