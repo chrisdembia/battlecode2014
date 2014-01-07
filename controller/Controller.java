@@ -3,6 +3,8 @@
  */
 package team139.controller;
 
+import team139.model.Model;
+import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 
 /**
@@ -15,9 +17,11 @@ import battlecode.common.RobotController;
 public abstract class Controller {
 	
 	protected final RobotController rc;
+	protected final Model model;
 
 	public Controller(RobotController rc) {
 		this.rc = rc;
+		this.model = new Model(rc);
 	}
 	
 	public final void run() {
@@ -46,7 +50,8 @@ public abstract class Controller {
 		
 	}
 	
-	public abstract void takeOneTurn();
+	// TODO prevent this method from being able to throw exceptions.
+	public abstract void takeOneTurn() throws GameActionException;
 
 	public String toString() {
 		return rc.getType() + " Controller with ID " + rc.getRobot().getID();
