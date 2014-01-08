@@ -18,6 +18,7 @@ public abstract class Controller {
 	
 	protected final RobotController rc;
 	protected final Model model;
+	protected final int END_TURN_BYTECODE_USE = 0;
 
 	public Controller(RobotController rc) {
 		this.rc = rc;
@@ -45,8 +46,12 @@ public abstract class Controller {
 		
 	}
 	
+	
 	private void endTurn() {
 		// TODO Auto-generated method stub
+		
+		// IMPORTANT: Make sure the END_TURN_BYTECODE_USE variable 
+		//			  reflects the bytecode used in this method
 		
 	}
 	
