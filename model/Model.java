@@ -66,4 +66,22 @@ public class Model {
 		Robot[] nearbyEnemies = rc.senseNearbyGameObjects(Robot.class,10,rc.getTeam().opponent());
 		return nearbyEnemies.length > 0;
 	}
+
+	/**
+	 * TODO what if there are no nearby enemies?
+	 * @return
+	 * @throws GameActionException 
+	 */
+	public MapLocation firstNearbyEnemyLocation() throws GameActionException {
+		Robot[] nearbyEnemies = rc.senseNearbyGameObjects(Robot.class,10,rc.getTeam().opponent());
+		return rc.senseRobotInfo(nearbyEnemies[0]).location;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public Direction directionTowardsEnemyHQ() {
+		return rc.getLocation().directionTo(rc.senseEnemyHQLocation());
+	}
 }
