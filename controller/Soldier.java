@@ -5,7 +5,7 @@ package team139.controller;
 
 import java.util.Random;
 
-import battlecode.common.Direction;
+import team139.utils.Util;
 import battlecode.common.RobotController;
 import battlecode.common.RobotType;
 
@@ -24,9 +24,6 @@ public class Soldier extends Controller {
 		super(rc);
 
 		// TODO delete this when we don't need it.
-		Direction[] directions = {Direction.NORTH, Direction.NORTH_EAST,
-				Direction.EAST, Direction.SOUTH_EAST, Direction.SOUTH,
-				Direction.SOUTH_WEST, Direction.WEST, Direction.NORTH_WEST};
 		
 	}
 
@@ -37,7 +34,6 @@ public class Soldier extends Controller {
 	public void takeOneTurn() {
 		int action = (rc.getRobot().getID() * rand.nextInt(101) + 50) % 101;
 		
-		// TODO write manhattan distance function.
 		if (action < 1 && model.myManDistanceTo(rc.senseHQLocation()) > 2) {
 			rc.construct(RobotType.PASTR);
 			
@@ -48,7 +44,7 @@ public class Soldier extends Controller {
 			}
 		
 		} else if (action < 80) {
-			mover.move(directions[rand.nextInt(8)]);
+			mover.move(Util.DIRECTIONS[rand.nextInt(8)]);
 			
 		} else {
 			mover.sneakTowards(rc.senseEnemyHQLocation());

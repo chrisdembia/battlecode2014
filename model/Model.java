@@ -3,8 +3,14 @@
  */
 package team139.model;
 
+import team139.utils.Util;
+
+import com.sun.org.apache.xml.internal.serializer.utils.Utils;
+
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
+import battlecode.common.Robot;
 import battlecode.common.RobotController;
 
 /**
@@ -32,14 +38,32 @@ public class Model {
 	
 	/**
 	 * TODO prevent throwing; make sure we can sense; can ALL objects sense their adjacent squares?
-	 * @param loc
-	 * @return
+	 * @param dir
+	 * @return true if can spawn in the adjacent tile in direction dir
 	 * @throws GameActionException 
 	 */
-	public boolean canSpawnInDirection(Direction dir)
+	public boolean canSpawnInDirection(final Direction dir)
 			throws GameActionException {
 		// Location loc = rc.getLocation().add(dir)
 		// if rc.canSenseSquare(loc) { ...
 		return rc.senseObjectAtLocation(rc.getLocation().add(dir)) == null;
+	}
+
+	/**
+	 * @param loc
+	 * @return Manhattan distance between this robot's location and loc
+	 */
+	public int myManDistanceTo(final MapLocation loc) {
+		return Util.manhattanDistance(rc.getLocation(), loc);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean existsNearbyEnemies() {
+		// TODO cache this.
+		Robot[] nearbyEnemies = rc.senseNearbyGameObjects(Robot.class,10,rc.getTeam().opponent());
+		return nearbyEnemies.length > 0;
 	}
 }
