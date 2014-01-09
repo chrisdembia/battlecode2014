@@ -6,6 +6,7 @@ package team139.controller;
 import java.util.Random;
 
 import team139.model.Model;
+import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 
@@ -35,9 +36,8 @@ public abstract class Controller {
 			try {
 				beginTurn();
 				takeOneTurn();
-				endTurn();
-				
-				rc.yield();
+				// TODO endTurn();
+				yield();
 			}
 			catch (Exception e) {
 				// TODO how to handle exceptions?
@@ -58,6 +58,10 @@ public abstract class Controller {
 		// IMPORTANT: Make sure the END_TURN_BYTECODE_USE variable 
 		//			  reflects the bytecode used in this method
 		
+	}
+	
+	private void yield() {
+		rc.yield();
 	}
 	
 	// TODO prevent this method from being able to throw exceptions.

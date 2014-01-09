@@ -30,6 +30,7 @@ public class HQ extends Controller {
 	 */
 	@Override
 	public void takeOneTurn() throws GameActionException {
+		
 		if (rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
 			Direction dir = model.directionToEnemyHQ();
 			if (model.canSpawnInDirection(dir)) { 

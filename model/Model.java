@@ -72,6 +72,7 @@ public class Model {
 	}
 
 	/**
+	 * TODO make into cache variable
 	 * TODO what if there are no nearby enemies?
 	 * @return
 	 * @throws GameActionException 
@@ -81,7 +82,7 @@ public class Model {
 	}
 
 	/**
-	 * 
+	 * TODO make into cache variable.
 	 * @return
 	 */
 	public Direction directionTowardsEnemyHQ() {
