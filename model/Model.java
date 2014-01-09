@@ -12,6 +12,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.Robot;
 import battlecode.common.RobotController;
+import battlecode.common.TerrainTile;
 
 /**
  * This is how the Controller learns anything about its environment. Here, we
@@ -23,6 +24,8 @@ public class Model {
 	
 	// TODO make this static?
 	private final RobotController rc;
+	
+	public static TerrainTile[][] terrainMap;
 	public NearbyEnemies nearbyEnemies;
 
 	public Model(RobotController rc) {
