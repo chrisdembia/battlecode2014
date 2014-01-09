@@ -34,24 +34,26 @@ public class Soldier extends Controller {
 	 */
 	@Override
 	public void takeOneTurn() throws GameActionException {
-		int action = (rc.getRobot().getID() * rand.nextInt(101) + 50) % 101;
-		
-		if (action < 1 && model.myManDistanceTo(rc.senseHQLocation()) > 2) {
-			rc.construct(RobotType.PASTR);
-			
-		} else if (action < 30) {
-			if (model.existsNearbyEnemies()) {
-				// Model should do the caching of the most nearby enemy.
-				attacker.attack(model.firstNearbyEnemyLocation());
-			}
-		
-		} else if (action < 80) {
-			mover.move(Util.DIRECTIONS[rand.nextInt(8)]);
-			
-		} else {
-			mover.sneak(model.directionTowardsEnemyHQ());
-		}
 
+		if (rc.isActive()) {
+			int action = (rc.getRobot().getID() * rand.nextInt(101) + 50) % 101;
+
+			if (action < 1 && model.myManDistanceTo(rc.senseHQLocation()) > 2) {
+				rc.construct(RobotType.PASTR);
+
+			} else if (action < 30) {
+				if (model.existsNearbyEnemies()) {
+					// Model should do the caching of the most nearby enemy.
+					attacker.attack(model.firstNearbyEnemyLocation());
+				}
+
+			} else if (action < 80) {
+				mover.move(Util.DIRECTIONS[rand.nextInt(8)]);
+
+			} else {
+				mover.sneak(model.directionTowardsEnemyHQ());
+			}
+		}
 	}
 
 }
