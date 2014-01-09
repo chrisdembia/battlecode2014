@@ -91,4 +91,13 @@ public class Model {
 	public Direction directionTowardsEnemyHQ() {
 		return rc.getLocation().directionTo(rc.senseEnemyHQLocation());
 	}
+
+	/**
+	 * This calls invalidate() on all cached variables in the model.
+	 * This should be called, for example, at the end of a turn (or
+	 * at the beginning of a turn).
+	 */
+	public void invalidate() {
+		nearbyEnemies.invalidate();
+	}
 }

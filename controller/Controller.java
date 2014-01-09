@@ -3,10 +3,10 @@
  */
 package team139.controller;
 
+import java.util.EventListener;
 import java.util.Random;
 
 import team139.model.Model;
-import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 
@@ -17,7 +17,7 @@ import battlecode.common.RobotController;
  * then calls Action's.
  *
  */
-public abstract class Controller {
+public abstract class Controller implements EventListener {
 	
 	protected final RobotController rc;
 	protected final Model model;
@@ -37,6 +37,10 @@ public abstract class Controller {
 				beginTurn();
 				takeOneTurn();
 				// TODO endTurn();
+				// TODO note that we may want a turn to end naturally somewhere
+				// else. For example, we may have a method. "Go to destination"
+				// that calls yield() inside of it, and the loop continues
+				// until the robot reaches its destination.
 				yield();
 			}
 			catch (Exception e) {
@@ -61,11 +65,21 @@ public abstract class Controller {
 	}
 	
 	private void yield() {
+		// Invalidate the model.
+		model.invalidate();
 		rc.yield();
 	}
 	
 	// TODO prevent this method from being able to throw exceptions.
 	public abstract void takeOneTurn() throws GameActionException;
+	
+	// Event listening
+	// ========================================================================
+	/**
+	 * TODO maybe start attacking the enemies.
+	 * @param e
+	 */
+	public void existsNearbyEnemies(ExistsNearbyEnemiesEvent e) { }
 
 	public String toString() {
 		return rc.getType() + " Controller with ID " + rc.getRobot().getID();
