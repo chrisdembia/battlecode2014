@@ -6,6 +6,7 @@ package team139.controller;
 import team139.actions.Spawner;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
+import battlecode.common.GameConstants;
 import battlecode.common.RobotController;
 
 /**
@@ -29,7 +30,7 @@ public class HQ extends Controller {
 	 */
 	@Override
 	public void takeOneTurn() throws GameActionException {
-		if (rc.senseRobotCount() <= 25) {
+		if (rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
 			Direction dir = model.directionToEnemyHQ();
 			if (model.canSpawnInDirection(dir)) { 
 				spawner.spawn(dir);

@@ -23,9 +23,15 @@ public class Model {
 	
 	// TODO make this static?
 	private final RobotController rc;
+	public NearbyEnemies nearbyEnemies;
 
 	public Model(RobotController rc) {
 		this.rc = rc;
+		this.nearbyEnemies = new NearbyEnemies(this);
+	}
+	
+	public final RobotController rc() {
+		return rc;
 	}
 	
 	/**
@@ -62,9 +68,7 @@ public class Model {
 	 * @return
 	 */
 	public boolean existsNearbyEnemies() {
-		// TODO cache this.
-		Robot[] nearbyEnemies = rc.senseNearbyGameObjects(Robot.class,10,rc.getTeam().opponent());
-		return nearbyEnemies.length > 0;
+		return nearbyEnemies.get().length > 0;
 	}
 
 	/**
@@ -73,8 +77,7 @@ public class Model {
 	 * @throws GameActionException 
 	 */
 	public MapLocation firstNearbyEnemyLocation() throws GameActionException {
-		Robot[] nearbyEnemies = rc.senseNearbyGameObjects(Robot.class,10,rc.getTeam().opponent());
-		return rc.senseRobotInfo(nearbyEnemies[0]).location;
+		return rc.senseRobotInfo(nearbyEnemies.get()[0]).location;
 	}
 
 	/**
