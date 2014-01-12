@@ -21,9 +21,8 @@ public class SoldierExample extends State {
 
 	// TODO why did I make this static and the others final?
 	protected static final Random rand = new Random();
-	private final RobotController rc;
-	private final Model model;
 	private final Soldier soldier;
+	
 	/**
 	 * 
 	 * @param name
@@ -32,8 +31,6 @@ public class SoldierExample extends State {
 	public SoldierExample(String name, Controller con) {
 		super(name, con);
 		assert(con instanceof Soldier);
-		this.rc = con.rc();
-		this.model = con.model();
 		this.soldier = (Soldier) con;
 	}
 

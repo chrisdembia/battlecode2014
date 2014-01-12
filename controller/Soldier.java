@@ -26,11 +26,11 @@ public class Soldier extends Controller {
 		this.attacker = new Attacker(rc);
 		this.mover = new Mover(rc);
 		addState(new SoldierExample("soldier_ex", this));
-		setActiveState("soldier_ex");
 	}
 
 	@Override
 	protected void decideState() throws GameActionException {
+		setActiveState("soldier_ex");
 	}
 
 }

@@ -4,7 +4,10 @@
 package team139.states;
 
 import battlecode.common.GameActionException;
+import battlecode.common.RobotController;
 import team139.controller.Controller;
+import team139.controller.Soldier;
+import team139.model.Model;
 
 /**
  *
@@ -13,10 +16,14 @@ public abstract class State {
 	
 	private final String name;
 	protected final Controller con;
+	protected final RobotController rc;
+	protected final Model model;
 
 	public State(String name, Controller con) {
 		this.name = name;
 		this.con = con;
+		this.rc = con.rc();
+		this.model = con.model();
 	}
 	
 	public final String getName() {
