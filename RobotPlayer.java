@@ -4,7 +4,6 @@
 package team139;
 
 import battlecode.common.RobotController;
-import battlecode.common.RobotType;
 
 import team139.controller.HQ;
 import team139.controller.NoiseTower;

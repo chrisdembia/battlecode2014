@@ -3,6 +3,7 @@
  */
 package team139.controller;
 
+import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 
 /**
@@ -18,13 +19,10 @@ public class PASTR extends Controller {
 		// TODO Auto-generated constructor stub
 	}
 
-	/* (non-Javadoc)
-	 * @see team139.controller.Controller#takeOneTurn()
-	 */
 	@Override
-	public void takeOneTurn() {
+	protected void decideState() throws GameActionException {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }

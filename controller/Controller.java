@@ -3,10 +3,7 @@
  */
 package team139.controller;
 
-import java.util.Random;
-
 import team139.model.Model;
-import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 
@@ -15,28 +12,36 @@ import battlecode.common.RobotController;
  * specializations of RobotType's. The Controller is where the AI logic lives.
  * The Controller uses information from a Model to decide what it should do,
  * then calls Action's.
+ * 
+ * The Controller is also a StateManager: it manages a queue of states.
  *
  */
-public abstract class Controller {
+public abstract class Controller extends StateManager {
 	
 	protected final RobotController rc;
 	protected final Model model;
 	protected final int END_TURN_BYTECODE_USE = 0;
-	// TODO why did I make this static and the others final?
-	protected static Random rand;
 
 	public Controller(RobotController rc) {
+		super();
 		this.rc = rc;
 		this.model = new Model(rc);
-		rand = new Random();
+	}
+	
+	public final RobotController rc() {
+		return rc;
+	}
+	
+	public final Model model() {
+		return model;
 	}
 	
 	public final void run() {
 		while (true) {
 			try {
 				beginTurn();
-				takeOneTurn();
-				// TODO endTurn();
+				decideState();
+				if (activeStates() > 0) getActiveState().run();
 				yield();
 			}
 			catch (Exception e) {
@@ -64,8 +69,12 @@ public abstract class Controller {
 		rc.yield();
 	}
 	
-	// TODO prevent this method from being able to throw exceptions.
-	public abstract void takeOneTurn() throws GameActionException;
+	/**
+	 * This is the Controller's chance to directly affect what states
+	 * should be in the queue.
+	 * @throws GameActionException 
+	 */
+	protected abstract void decideState() throws GameActionException;
 
 	public String toString() {
 		return rc.getType() + " Controller with ID " + rc.getRobot().getID();

@@ -15,7 +15,7 @@ import battlecode.common.RobotController;
 public class HQ extends Controller {
 
 	// TODO can these be static (instead)? if so, should they be?
-	private final Spawner spawner;
+	public final Spawner spawner;
 
 	/**
 	 * @param rc
@@ -24,18 +24,16 @@ public class HQ extends Controller {
 		super(rc);
 		this.spawner = new Spawner(rc);
 	}
-
-	/* (non-Javadoc)
-	 * @see team139.controller.Controller#takeOneTurn()
-	 */
+	
 	@Override
-	public void takeOneTurn() throws GameActionException {
+	protected void decideState() throws GameActionException {
 		
+		// TODO wrong place; create a State.
 		if (rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
 			Direction dir = model.directionToEnemyHQ();
 			if (model.canSpawnInDirection(dir)) { 
 				spawner.spawn(dir);
 			}
-		}
+		}		
 	}
 }
