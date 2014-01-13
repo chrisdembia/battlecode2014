@@ -12,6 +12,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.Robot;
 import battlecode.common.RobotController;
+import battlecode.common.Team;
 import battlecode.common.TerrainTile;
 
 /**
@@ -24,17 +25,26 @@ public class Model {
 	
 	// TODO make this static?
 	private final RobotController rc;
+	public final Team opponent;
 	
 	public static TerrainTile[][] terrainMap;
 	public NearbyEnemies nearbyEnemies;
+	public NearbyEnemyInfos nearbyEnemyInfos;
+	public NearestEnemyLocation nearestEnemyLocation;
 
 	public Model(RobotController rc) {
 		this.rc = rc;
+		this.opponent = rc.getTeam().opponent();
 		this.nearbyEnemies = new NearbyEnemies(this);
 	}
 	
 	public final RobotController rc() {
 		return rc;
+	}
+	
+	public boolean isTraversable(MapLocation loc) throws GameActionException{
+		//TODO: replace senseTerrainTile with the stored terrainMap
+		return rc.senseTerrainTile(loc) != TerrainTile.VOID && rc.senseObjectAtLocation(loc) == null;
 	}
 	
 	/**
@@ -74,15 +84,15 @@ public class Model {
 		return nearbyEnemies.get().length > 0;
 	}
 
-	/**
-	 * TODO make into cache variable
-	 * TODO what if there are no nearby enemies?
-	 * @return
-	 * @throws GameActionException 
-	 */
-	public MapLocation firstNearbyEnemyLocation() throws GameActionException {
-		return rc.senseRobotInfo(nearbyEnemies.get()[0]).location;
-	}
+//	/**
+//	 * TODO make into cache variable
+//	 * TODO what if there are no nearby enemies?
+//	 * @return
+//	 * @throws GameActionException 
+//	 */
+//	public MapLocation firstNearbyEnemyLocation() throws GameActionException {
+//		return rc.senseRobotInfo(nearbyEnemies.get()[0]).location;
+//	}
 
 	/**
 	 * TODO make into cache variable.

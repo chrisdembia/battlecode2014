@@ -5,15 +5,16 @@ import team139.utils.CacheVariable;
 
 public class NearbyEnemies extends CacheVariable<Robot[]> {
 
+	int sensorRadius;
 	public NearbyEnemies(Model m) {
 		super(m);
-		// TODO Auto-generated constructor stub
+		sensorRadius = (int) Math.sqrt(m.rc().getType().sensorRadiusSquared);
 	}
 
 	@Override
 	protected Robot[] calculate() {
 		return m.rc().senseNearbyGameObjects(Robot.class,
-				10,
+				sensorRadius,
 				m.rc().getTeam().opponent());
 	}
 
