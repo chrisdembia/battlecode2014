@@ -25,16 +25,24 @@ public class Model {
 	// TODO make this static?
 	private final RobotController rc;
 	
-	public static TerrainTile[][] terrainMap;
+	// Cache variables.
+	// =======================================================================
 	public NearbyEnemies nearbyEnemies;
+	public MissionAssignmentCache myMissionAssignment;
 
 	public Model(RobotController rc) {
 		this.rc = rc;
 		this.nearbyEnemies = new NearbyEnemies(this);
+		this.myMissionAssignment = new MissionAssignmentCache(this);
 	}
 	
 	public final RobotController rc() {
 		return rc;
+	}
+	
+	public void invalidate() {
+		nearbyEnemies.invalidate();
+		
 	}
 	
 	/**
@@ -71,8 +79,9 @@ public class Model {
 	/**
 	 * 
 	 * @return
+	 * @throws GameActionException 
 	 */
-	public boolean existsNearbyEnemies() {
+	public boolean existsNearbyEnemies() throws GameActionException {
 		return nearbyEnemies.get().length > 0;
 	}
 

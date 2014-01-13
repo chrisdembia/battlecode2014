@@ -42,6 +42,7 @@ public abstract class Controller {
 			catch (Exception e) {
 				// TODO how to handle exceptions?
 				e.printStackTrace();
+				rc.breakpoint();
 			}
 		}
 	}

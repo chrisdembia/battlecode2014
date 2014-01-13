@@ -3,6 +3,7 @@
  */
 package team139.utils;
 
+import battlecode.common.GameActionException;
 import team139.model.Model;
 
 /**
@@ -39,8 +40,9 @@ public abstract class CacheVariable<T> {
 	 * If we have a valid value, we'll return that. Otherwise, we'll recompute
 	 * the variable.
 	 * @return The value of this cache variable.
+	 * @throws GameActionException 
 	 */
-	public T get() {
+	public T get() throws GameActionException {
 		if (value == null) {
 			value = calculate();
 		}
@@ -49,7 +51,8 @@ public abstract class CacheVariable<T> {
 	
 	/**
 	 * This is the meat of the cache variable. How do we compute the variable?
+	 * @throws GameActionException 
 	 */
-	protected abstract T calculate();
+	protected abstract T calculate() throws GameActionException;
 
 }
