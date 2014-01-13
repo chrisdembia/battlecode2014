@@ -9,7 +9,8 @@ import battlecode.common.GameConstants;
 import battlecode.common.RobotController;
 
 /**
- *
+ * TODO robot ID's can be very high numbers; we can't reserve so many
+ * message channels to use robot ID's.
  */
 public class MissionAssignment extends Message {
 
