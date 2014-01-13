@@ -56,7 +56,9 @@ public class Model {
 	}
 	
 	/**
-	 * TODO prevent throwing; make sure we can sense; can ALL objects sense their adjacent squares?
+	 * TODO prevent throwing; make sure we can sense; can ALL objects sense
+	 * their adjacent squares?
+	 * 
 	 * @param dir
 	 * @return true if can spawn in the adjacent tile in direction dir
 	 * @throws GameActionException 

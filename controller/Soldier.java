@@ -7,6 +7,7 @@ import java.util.Random;
 
 import team139.actions.Attacker;
 import team139.actions.Mover;
+import team139.model.MissionAssignment;
 import team139.utils.Util;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
@@ -42,6 +43,8 @@ public class Soldier extends Controller {
 	MapLocation pastrLocation = null;
 	RobotInfo pastrInfo;
 
+	private int id;
+
 	/**
 	 * @param rc
 	 */
@@ -49,7 +52,8 @@ public class Soldier extends Controller {
 		super(rc);
 		this.attacker = new Attacker(rc);
 		this.mover = new Mover(rc);
-		this.mission = Mission.AttackNearestPASTR;
+		this.mission = Mission.Sentry;
+		this.id = rc.getRobot().getID();
 	}
 
 	/* (non-Javadoc)
@@ -57,6 +61,8 @@ public class Soldier extends Controller {
 	 */
 	@Override
 	public void takeOneTurn() throws GameActionException {
+		
+		determineMission();
 
 		switch (mission) {
 		case Sentry:
@@ -161,16 +167,6 @@ public class Soldier extends Controller {
 
 	}
 
-	private Robot getEnemySoldierInRange() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private boolean enemySoldiersInRange() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	private MapLocation getNearestPastrLocation() throws GameActionException {
 		MapLocation[] allLocations = this.rc.sensePastrLocations(this.model.opponent);
 		if (allLocations.length == 0) return null;
@@ -181,6 +177,9 @@ public class Soldier extends Controller {
 				returnLoc = loc;
 		}
 		return returnLoc;
+
+	private void determineMission() {
+		mission = new MissionAssignment(rc, rc.getRobot().getID()).mission;
 	}
 
 }
