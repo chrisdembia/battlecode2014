@@ -60,7 +60,7 @@ public abstract class Controller {
 		
 	}
 	
-	private void yield() {
+	protected void yield() {
 		rc.yield();
 	}
 	

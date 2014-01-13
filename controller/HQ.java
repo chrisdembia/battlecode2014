@@ -4,9 +4,11 @@
 package team139.controller;
 
 import team139.actions.Spawner;
+import team139.model.MissionAssignment;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
+import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 
 /**
@@ -50,6 +52,15 @@ public class HQ extends Controller {
 				Direction dir = model.directionToEnemyHQ();
 				if (model.canSpawnInDirection(dir)) { 
 					spawner.spawn(dir);
+					MapLocation newlySpawned = rc.getLocation().add(dir);
+					yield();
+					if (rc.senseObjectAtLocation(newlySpawned) != null) {
+						// TODO not the exact check we want but it should
+						// suffice.
+						MissionAssignment.broadcast(rc,
+								rc.senseObjectAtLocation(newlySpawned).getID(),
+								Soldier.Mission.ExamplePlayer);
+					}
 				}
 			}
 			break;

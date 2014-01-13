@@ -7,6 +7,7 @@ import java.util.Random;
 
 import team139.actions.Attacker;
 import team139.actions.Mover;
+import team139.model.MissionAssignment;
 import team139.utils.Util;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
@@ -29,6 +30,7 @@ public class Soldier extends Controller {
 	}
 	
 	private Mission mission;
+	private int id;
 
 	/**
 	 * @param rc
@@ -38,6 +40,7 @@ public class Soldier extends Controller {
 		this.attacker = new Attacker(rc);
 		this.mover = new Mover(rc);
 		this.mission = Mission.Sentry;
+		this.id = rc.getRobot().getID();
 	}
 
 	/* (non-Javadoc)
@@ -45,6 +48,8 @@ public class Soldier extends Controller {
 	 */
 	@Override
 	public void takeOneTurn() throws GameActionException {
+		
+		determineMission();
 
 		switch (mission) {
 		case Sentry:
@@ -81,6 +86,10 @@ public class Soldier extends Controller {
 			break;
 		}
 
+	}
+
+	private void determineMission() {
+		mission = new MissionAssignment(rc, rc.getRobot().getID()).mission;
 	}
 
 }
