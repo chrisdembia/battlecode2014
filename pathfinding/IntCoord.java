@@ -26,6 +26,8 @@ package team139.pathfinding;
 
 import java.util.Arrays;
 
+import battlecode.common.MapLocation;
+
 /**
  * A simple tuple class that correctly represents an integer coordinate
  * in arbitrary dimensions.  Equality, hashcode and comparisons are all
@@ -37,6 +39,10 @@ public class IntCoord implements Coordinate {
 
     public IntCoord(int... values) {
         _coords = Arrays.copyOf(values, values.length);
+    }
+    
+    public IntCoord(MapLocation loc) {
+    	this(loc.x, loc.y);
     }
 
     public int[] getInts() {

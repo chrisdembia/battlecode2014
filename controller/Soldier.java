@@ -8,6 +8,9 @@ import java.util.Random;
 import team139.actions.Attacker;
 import team139.actions.Mover;
 import team139.model.MissionAssignment;
+import team139.pathfinding.GridDStar;
+import team139.pathfinding.IntCoord;
+import team139.pathfinding.StaticMap;
 import team139.utils.Util;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
@@ -25,6 +28,7 @@ public class Soldier extends Controller {
 
 	private final Attacker attacker;
 	private final Mover mover;
+	private GridDStar pathplanner;
 	
 	
 	private final int PASTR_ATTACK_THRESH = 50; //If attacking a pastr with this health or less, disregard enemy soldiers
@@ -54,6 +58,8 @@ public class Soldier extends Controller {
 		this.mover = new Mover(rc);
 		this.mission = Mission.Sentry;
 		this.id = rc.getRobot().getID();
+		
+		model.buildStaticMap();
 	}
 
 	/* (non-Javadoc)
@@ -79,11 +85,17 @@ public class Soldier extends Controller {
 					else{
 					// Go to Enemy HQ
 						/// CRUDE PATHFINDING:
-						Direction stepDirection = rc.getLocation().directionTo(rc.senseEnemyHQLocation());
-						while (!rc.canMove(stepDirection)){
-							stepDirection = stepDirection.rotateRight();
+//						Direction stepDirection = rc.getLocation().directionTo(rc.senseEnemyHQLocation());
+//						while (!rc.canMove(stepDirection)){
+//							stepDirection = stepDirection.rotateRight();
+//						}
+						pathplanner = new GridDStar(model.map, new IntCoord(rc.getLocation()), new IntCoord(model.enemyHQLocation));
+						while (!rc.getLocation().equals(model.enemyHQLocation)){
+							pathplanner.updateStart(new IntCoord(rc.getLocation()));
+							int[] nextStepCoords = pathplanner.plan().get(0).getInts();
+							MapLocation nextStep = new MapLocation(nextStepCoords[0], nextStepCoords[1]);
+							mover.move(rc.getLocation().directionTo(nextStep));
 						}
-						mover.move(stepDirection);
 					}
 					break;
 					
@@ -122,13 +134,24 @@ public class Soldier extends Controller {
 				// Go to nearest PASTR
 					/// CRUDE PATHFINDING:
 					//MapLocation nextStep;
-					Direction stepDirection = rc.getLocation().directionTo(pastrLocation);
-					//nextStep = rc.getLocation().add(stepDirection);
-					while (!rc.canMove(stepDirection)){
-						stepDirection = stepDirection.rotateRight();
-						//nextStep = rc.getLocation().add(stepDirection);
+//					Direction stepDirection = rc.getLocation().directionTo(pastrLocation);
+//					//nextStep = rc.getLocation().add(stepDirection);
+//					while (!rc.canMove(stepDirection)){
+//						stepDirection = stepDirection.rotateRight();
+//						//nextStep = rc.getLocation().add(stepDirection);
+//					}
+//					mover.move(stepDirection);
+					
+					
+					pathplanner = new GridDStar(model.map, new IntCoord(rc.getLocation()), new IntCoord(model.enemyHQLocation));
+					while (!rc.getLocation().equals(model.enemyHQLocation)){
+						pathplanner.updateStart(new IntCoord(rc.getLocation()));
+						int[] nextStepCoords = pathplanner.plan().get(0).getInts();
+						MapLocation nextStep = new MapLocation(nextStepCoords[0], nextStepCoords[1]);
+						mover.move(rc.getLocation().directionTo(nextStep));
 					}
-					mover.move(stepDirection);
+					
+					
 //					while (!rc.isActive()){
 //						rc.yield();
 //					}

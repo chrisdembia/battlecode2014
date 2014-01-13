@@ -3,6 +3,7 @@
  */
 package team139.model;
 
+import team139.pathfinding.StaticMap;
 import team139.utils.Util;
 
 import battlecode.common.Direction;
@@ -10,6 +11,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import battlecode.common.Team;
+import battlecode.common.TerrainTile;
 
 /**
  * This is how the Controller learns anything about its environment. Here, we
@@ -22,6 +24,8 @@ public class Model {
 	// TODO make this static?
 	private final RobotController rc;
 	public final Team opponent;
+	public MapLocation enemyHQLocation;
+	public StaticMap map; 
 	
 	// Cache variables.
 	// =======================================================================
@@ -37,6 +41,8 @@ public class Model {
 		this.myMissionAssignment = new MissionAssignmentCache(this);
 		this.nearbyEnemyInfos = new NearbyEnemyInfos(this);
 		this.nearestEnemyLocation = new NearestEnemyLocation(this);
+		this.map = new StaticMap(rc.getMapWidth(), rc.getMapHeight());
+		this.enemyHQLocation = rc.senseEnemyHQLocation();
 	}
 	
 	public final RobotController rc() {
@@ -124,5 +130,35 @@ public class Model {
 	 */
 	public Direction directionTowardsEnemyHQ() {
 		return rc.getLocation().directionTo(rc.senseEnemyHQLocation());
+	}
+	
+	public void buildStaticMap() {
+		TerrainTile tile;
+		for (int i=0; i<rc.getMapWidth(); i++){
+			for (int j=0; j<rc.getMapHeight(); i++){
+				tile = rc.senseTerrainTile(new MapLocation(i,j));
+				switch (tile){
+				case VOID:
+					map.set((byte)255, i, j);
+					break;
+				case NORMAL:
+					map.set((byte)25, i, j);
+					break;
+				case ROAD:
+					map.set((byte)0, i, j);
+					break;
+				case OFF_MAP:
+					map.set((byte)255, i, j);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		MapLocation enemyHQ = rc.senseEnemyHQLocation();
+		map.set((byte)255, enemyHQ.x, enemyHQ.y);
+		
+		MapLocation friendlyHQ = rc.senseHQLocation();
+		map.set((byte)255, friendlyHQ.x, friendlyHQ.y);
 	}
 }
