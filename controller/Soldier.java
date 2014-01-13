@@ -85,13 +85,9 @@ public class Soldier extends Controller {
 				Robot nearestPastr = (Robot)rc.senseObjectAtLocation(pastrLocation);
 				if (nearestPastr == null) break; //TODO: the pastr is already dead when we get here;
 				pastrInfo = rc.senseRobotInfo(nearestPastr);
-				if (pastrInfo.health > PASTR_ATTACK_THRESH && enemySoldiersInRange()){					
+				if (pastrInfo.health > PASTR_ATTACK_THRESH && model.existsNearbyEnemies()){					
 					//yes: attack enemy soldiers in range, or attack PASTR if no enemies
-					Robot enemySoldier = getEnemySoldierInRange();
-					while (!rc.isActive()){
-						rc.yield();
-					}
-					rc.attackSquare(rc.senseLocationOf(enemySoldier));
+					attacker.attack(model.nearestEnemyLocation.get());
 				}
 				else {
 					//no: attack it
@@ -177,6 +173,7 @@ public class Soldier extends Controller {
 				returnLoc = loc;
 		}
 		return returnLoc;
+	}
 
 	private void determineMission() throws GameActionException {
 		if (model.myMissionAssignment.get() == null)

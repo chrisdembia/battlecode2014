@@ -1,5 +1,6 @@
 package team139.model;
 
+import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.Robot;
 import battlecode.common.RobotInfo;
@@ -13,7 +14,7 @@ public class NearestEnemyLocation extends CacheVariable<MapLocation> {
 	}
 	
 	@Override
-	protected MapLocation calculate() {
+	protected MapLocation calculate() throws GameActionException {
 		int minDist = Integer.MAX_VALUE;
 		MapLocation closestLoc = m.nearbyEnemyInfos.get()[0].location;
 		for (RobotInfo info : m.nearbyEnemyInfos.get()){

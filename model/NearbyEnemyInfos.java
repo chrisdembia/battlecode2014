@@ -13,7 +13,7 @@ public class NearbyEnemyInfos extends CacheVariable<RobotInfo[]> {
 	}
 	
 	@Override
-	protected RobotInfo[] calculate() {
+	protected RobotInfo[] calculate() throws GameActionException {
 		RobotInfo[] infos = new RobotInfo[m.nearbyEnemies.get().length];
 		for (int i=0; i<m.nearbyEnemies.get().length; i++){
 			try {

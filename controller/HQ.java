@@ -62,7 +62,7 @@ public class HQ extends Controller {
 						// suffice.
 						MissionAssignment.broadcast(rc,
 								rc.senseObjectAtLocation(newlySpawned).getID(),
-								Soldier.Mission.ExamplePlayer);
+								Soldier.Mission.AttackNearestPASTR);
 					}
 				}
 			}
