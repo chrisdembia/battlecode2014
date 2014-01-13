@@ -25,7 +25,7 @@ public class Model {
 	
 	// Cache variables.
 	// =======================================================================
-	public NearbyEnemies nearbyEnemies;
+//	public NearbyEnemies nearbyEnemies;
 	public NearbyEnemyInfos nearbyEnemyInfos;
 	public NearestEnemyLocation nearestEnemyLocation;
 	public MissionAssignmentCache myMissionAssignment;
@@ -33,7 +33,7 @@ public class Model {
 	public Model(RobotController rc) {
 		this.rc = rc;
 		this.opponent = rc.getTeam().opponent();
-		this.nearbyEnemies = new NearbyEnemies(this);
+//		this.nearbyEnemies = new NearbyEnemies(this);
 		this.myMissionAssignment = new MissionAssignmentCache(this);
 		this.nearbyEnemyInfos = new NearbyEnemyInfos(this);
 		this.nearestEnemyLocation = new NearestEnemyLocation(this);
@@ -44,7 +44,7 @@ public class Model {
 	}
 	
 	public void invalidate() {
-		nearbyEnemies.invalidate();
+//		nearbyEnemies.invalidate();
 		myMissionAssignment.invalidate();
 		nearbyEnemyInfos.invalidate();
 		nearestEnemyLocation.invalidate();
@@ -104,7 +104,8 @@ public class Model {
 	 * @throws GameActionException 
 	 */
 	public boolean existsNearbyEnemies() throws GameActionException {
-		return nearbyEnemies.get().length > 0;
+		//return nearbyEnemies.get().length > 0;
+		return nearbyEnemyInfos.get().length > 0;
 	}
 
 //	/**

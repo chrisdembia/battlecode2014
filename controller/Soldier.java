@@ -72,10 +72,21 @@ public class Soldier extends Controller {
 			if (pastrLocation == null){
 				pastrLocation = getNearestPastrLocation();
 				if (pastrLocation == null){
-					//TODO: This should really tell the soldier to go to the enemy base and wait for 
-					// enemies to be spawned
-					mission = Mission.ExamplePlayer;
+					if (model.existsNearbyEnemies() && attacker.attack(model.nearestEnemyLocation.get())) {					
+						//yes: attack enemy soldiers in range, or attack PASTR if no enemies
+						break;
+					}
+					else{
+					// Go to Enemy HQ
+						/// CRUDE PATHFINDING:
+						Direction stepDirection = rc.getLocation().directionTo(rc.senseEnemyHQLocation());
+						while (!rc.canMove(stepDirection)){
+							stepDirection = stepDirection.rotateRight();
+						}
+						mover.move(stepDirection);
+					}
 					break;
+					
 				}
 			}
 			System.out.println(pastrLocation.toString());
@@ -83,7 +94,7 @@ public class Soldier extends Controller {
 				// If yes, 
 				//Does it have more than PASTR_ATTACK_THRESH hp?
 				Robot nearestPastr = (Robot)rc.senseObjectAtLocation(pastrLocation);
-				if (nearestPastr == null) break; //TODO: the pastr is already dead when we get here;
+				if (nearestPastr == null) {pastrLocation = null; break; } //Pastr is dead, start over
 				pastrInfo = rc.senseRobotInfo(nearestPastr);
 				if (pastrInfo.health > PASTR_ATTACK_THRESH && model.existsNearbyEnemies()){					
 					//yes: attack enemy soldiers in range, or attack PASTR if no enemies
@@ -91,11 +102,12 @@ public class Soldier extends Controller {
 				}
 				else {
 					//no: attack it
-					while (!rc.isActive()){
-						//TODO: Check if soldiers are close by
-						rc.yield();
-					}
-					rc.attackSquare(pastrLocation);
+					attacker.attack(pastrLocation);
+//					while (!rc.isActive()){
+//						//TODO: Check if soldiers are close by
+//						rc.yield();
+//					}
+//					rc.attackSquare(pastrLocation);
 				}
 			
 			}

@@ -3,28 +3,44 @@ package team139.model;
 import battlecode.common.GameActionException;
 import battlecode.common.Robot;
 import battlecode.common.RobotInfo;
+import battlecode.common.RobotType;
 import team139.utils.CacheVariable;
 
 public class NearbyEnemyInfos extends CacheVariable<RobotInfo[]> {
 
+	private int sensorRadius;
+
 	public NearbyEnemyInfos(Model m) {
 		super(m);
-		// TODO Auto-generated constructor stub
+		sensorRadius = (int) Math.sqrt(m.rc().getType().sensorRadiusSquared);
 	}
 	
 	@Override
 	protected RobotInfo[] calculate() throws GameActionException {
-		RobotInfo[] infos = new RobotInfo[m.nearbyEnemies.get().length];
-		for (int i=0; i<m.nearbyEnemies.get().length; i++){
-			try {
-				infos[i] = m.rc().senseRobotInfo(m.nearbyEnemies.get()[i]);
-			} catch (GameActionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				m.rc().breakpoint();
+		Robot[] allRobots = m.rc().senseNearbyGameObjects(Robot.class,
+				sensorRadius,
+				m.rc().getTeam().opponent());
+		RobotInfo[] infos = new RobotInfo[allRobots.length];
+		int numAttackableEnemies = 0;
+		for (int i=0; i<allRobots.length; i++){
+			RobotInfo info = m.rc().senseRobotInfo(allRobots[i]);
+			if (info.type == RobotType.NOISETOWER || info.type==RobotType.SOLDIER){
+				infos[i] = info;
+				numAttackableEnemies++;
+			}
+			else{
+				infos[i] = null;
 			}
 		}
-		return infos;
+		int j = 0;
+		RobotInfo[] attackableInfos = new RobotInfo[numAttackableEnemies];
+		for (int i=0; i<allRobots.length; i++){
+			if (infos[i] != null){
+				attackableInfos[j++] = infos[i];
+			}
+		}
+		
+		return attackableInfos;
 	}
 
 }
