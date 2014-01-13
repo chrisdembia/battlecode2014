@@ -178,8 +178,11 @@ public class Soldier extends Controller {
 		}
 		return returnLoc;
 
-	private void determineMission() {
-		mission = new MissionAssignment(rc, rc.getRobot().getID()).mission;
+	private void determineMission() throws GameActionException {
+		if (model.myMissionAssignment.get() == null)
+			mission = Mission.Sentry;
+		else
+			mission = model.myMissionAssignment.get();
 	}
 
 }

@@ -27,24 +27,26 @@ public class Model {
 	private final RobotController rc;
 	public final Team opponent;
 	
-	public static TerrainTile[][] terrainMap;
+	// Cache variables.
+	// =======================================================================
 	public NearbyEnemies nearbyEnemies;
 	public NearbyEnemyInfos nearbyEnemyInfos;
 	public NearestEnemyLocation nearestEnemyLocation;
+	public MissionAssignmentCache myMissionAssignment;
 
 	public Model(RobotController rc) {
 		this.rc = rc;
 		this.opponent = rc.getTeam().opponent();
 		this.nearbyEnemies = new NearbyEnemies(this);
+		this.myMissionAssignment = new MissionAssignmentCache(this);
 	}
 	
 	public final RobotController rc() {
 		return rc;
 	}
 	
-	public boolean isTraversable(MapLocation loc) throws GameActionException{
-		//TODO: replace senseTerrainTile with the stored terrainMap
-		return rc.senseTerrainTile(loc) != TerrainTile.VOID && rc.senseObjectAtLocation(loc) == null;
+	public void invalidate() {
+		nearbyEnemies.invalidate();
 	}
 	
 	/**
@@ -81,8 +83,9 @@ public class Model {
 	/**
 	 * 
 	 * @return
+	 * @throws GameActionException 
 	 */
-	public boolean existsNearbyEnemies() {
+	public boolean existsNearbyEnemies() throws GameActionException {
 		return nearbyEnemies.get().length > 0;
 	}
 
