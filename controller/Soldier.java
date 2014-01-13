@@ -94,24 +94,34 @@ public class Soldier extends Controller {
 						pathplanner = new GridDStar(model.map,
 								new IntCoord(rc.getLocation()),
 								new IntCoord(goal));
-						while (!rc.getLocation().equals(goal)){
-							pathplanner.updateStart(new IntCoord(rc.getLocation()));
-							List<IntCoord> path = pathplanner.plan();
-							System.out.println(path.toString());
-							if (path.isEmpty()) {
-								System.out.println("No path found.");
+						List<IntCoord> path = pathplanner.plan();
+						for (int i=0; i<path.size(); i++){
+							MapLocation nextStep = new MapLocation(path.get(i).getInts()[0], path.get(i).getInts()[1]);
+							while (!rc.getLocation().equals(nextStep)){
+								rc.setIndicatorString(2, nextStep.toString());
+								mover.move(rc.getLocation().directionTo(nextStep));
+								yield();
 							}
-							int[] nextStepCoords = path.get(1).getInts();
-							MapLocation nextStep = new MapLocation(nextStepCoords[0], nextStepCoords[1]);
-							rc.setIndicatorString(2, nextStep.toString());
-							mover.move(rc.getLocation().directionTo(nextStep));
 						}
+						
+//						while (!rc.getLocation().equals(goal)){
+//							pathplanner.updateStart(new IntCoord(rc.getLocation()));
+//							List<IntCoord> path = pathplanner.plan();
+//							System.out.println(path.toString());
+//							if (path.isEmpty()) {
+//								System.out.println("No path found.");
+//							}
+//							int[] nextStepCoords = path.get(2).getInts();
+//							MapLocation nextStep = new MapLocation(nextStepCoords[0], nextStepCoords[1]);
+//							rc.setIndicatorString(2, nextStep.toString());
+//							mover.move(rc.getLocation().directionTo(nextStep));
+//						}
 					}
 					break;
 					
 				}
 			}
-			System.out.println(pastrLocation.toString());
+			System.out.println("I'm heading to a PASTR at: " + pastrLocation.toString());
 			if (rc.canAttackSquare(pastrLocation)){
 				// If yes, 
 				//Does it have more than PASTR_ATTACK_THRESH hp?
@@ -154,12 +164,22 @@ public class Soldier extends Controller {
 					
 					
 					pathplanner = new GridDStar(model.map, new IntCoord(rc.getLocation()), new IntCoord(model.enemyHQLocation.add(Direction.NORTH)));
-					while (!rc.getLocation().equals(model.enemyHQLocation.add(Direction.NORTH))){
-						pathplanner.updateStart(new IntCoord(rc.getLocation()));
-						int[] nextStepCoords = pathplanner.plan().get(1).getInts();
-						MapLocation nextStep = new MapLocation(nextStepCoords[0], nextStepCoords[1]);
-						mover.move(rc.getLocation().directionTo(nextStep));
+					
+					List<IntCoord> path = pathplanner.plan();
+					for (int i=0; i<path.size(); i++){
+						MapLocation nextStep = new MapLocation(path.get(i).getInts()[0], path.get(i).getInts()[1]);
+						while (!rc.getLocation().equals(nextStep)){
+							rc.setIndicatorString(2, nextStep.toString());
+							mover.move(rc.getLocation().directionTo(nextStep));
+							yield();
+						}
 					}
+//					while (!rc.getLocation().equals(model.enemyHQLocation.add(Direction.NORTH))){
+//						pathplanner.updateStart(new IntCoord(rc.getLocation()));
+//						int[] nextStepCoords = pathplanner.plan().get(2).getInts();
+//						MapLocation nextStep = new MapLocation(nextStepCoords[0], nextStepCoords[1]);
+//						mover.move(rc.getLocation().directionTo(nextStep));
+//					}
 					
 					
 //					while (!rc.isActive()){
