@@ -41,8 +41,21 @@ public abstract class Controller extends StateManager {
 			try {
 				beginTurn();
 				decideState();
+				
+				while (activeTasks() != 0) {
+					getActiveTask().addDependencies();
+					getActiveTask().do();
+				}
+				/*
+					while (activeState().complete()) {
+						getActiveState.run();
+					}
+					getActiveState().resolveDependencies();
+					getActiveState().run()
+				}
 				if (activeStates() > 0) getActiveState().run();
 				yield();
+				*/
 			}
 			catch (Exception e) {
 				// TODO how to handle exceptions?
@@ -66,7 +79,9 @@ public abstract class Controller extends StateManager {
 	}
 	
 	private void yield() {
+		
 		rc.yield();
+		// TODO model.invalidate().
 	}
 	
 	/**

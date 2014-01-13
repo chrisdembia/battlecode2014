@@ -31,6 +31,38 @@ public class Soldier extends Controller {
 	@Override
 	protected void decideState() throws GameActionException {
 		setActiveState("soldier_ex");
+		/*
+		
+		addState(new GoTo("goto_enemy_hq", rc.senseEnemyHQLocation()));
+		setActiveState("goto_enemy_hq");
+		addState(new AttackNearbyEnemies("a1"));
+		
+		addState(new AttackLocation)
+		*/
+		
+		pushState(AttackNearestPASTR());
+		
+		/*
+		if (killnearbyenemies() {return;}
+		if (gotonearestpasture())) {return;}
+		if (attacknearestpasture() ){return}
+		if (gotoenemyhq()) {return} 
+		
+		pushState(GoToEnemyHQ());
+		pushState()
+		
+		goto nearest pasture
+		attack nearest pasture
+		
+		pushState(new DestroyNearestPASTR());
+		
+		if nearbyEnemies() setActiveState(attacknearbyenemies())
+		*/
+		
 	}
+	
+	
+	
+	
 
 }

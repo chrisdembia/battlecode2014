@@ -121,6 +121,13 @@ public abstract class StateManager {
 		
 	}
 	
+	pushTasks(tasksArray ) {
+		for task in tasks array:
+			pushTasks(task.dependencies();)
+			tasks.add(task);
+		task.
+	}
+	
 	/**
 	 * The state that is running.
 	 * @return
