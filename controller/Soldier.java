@@ -102,7 +102,7 @@ public class Soldier extends Controller {
 			else {
 				// If no
 				// Kill nearby enemies
-				if (model.existsNearbyEnemies() && attacker.attack(model.nearestEnemyLocation.get())){					
+				if (model.existsNearbyEnemies() && attacker.attack(model.nearestEnemyLocation.get())) {					
 					//yes: attack enemy soldiers in range, or attack PASTR if no enemies
 					break;
 				}

@@ -5,15 +5,11 @@ package team139.model;
 
 import team139.utils.Util;
 
-import com.sun.org.apache.xml.internal.serializer.utils.Utils;
-
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
-import battlecode.common.Robot;
 import battlecode.common.RobotController;
 import battlecode.common.Team;
-import battlecode.common.TerrainTile;
 
 /**
  * This is how the Controller learns anything about its environment. Here, we
@@ -39,6 +35,8 @@ public class Model {
 		this.opponent = rc.getTeam().opponent();
 		this.nearbyEnemies = new NearbyEnemies(this);
 		this.myMissionAssignment = new MissionAssignmentCache(this);
+		this.nearbyEnemyInfos = new NearbyEnemyInfos(this);
+		this.nearestEnemyLocation = new NearestEnemyLocation(this);
 	}
 	
 	public final RobotController rc() {
@@ -48,6 +46,8 @@ public class Model {
 	public void invalidate() {
 		nearbyEnemies.invalidate();
 		myMissionAssignment.invalidate();
+		nearbyEnemyInfos.invalidate();
+		nearestEnemyLocation.invalidate();
 	}
 	
 	/**

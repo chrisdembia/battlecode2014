@@ -22,7 +22,7 @@ public class Attacker {
 	public final boolean attack(MapLocation loc) throws GameActionException {
 		// TODO this is probably not a sufficient check to see if we can
 		// attack.
-		if (rc.isActive() && rc.canAttackSquare(loc)) {
+		if (loc != null && rc.isActive() && rc.canAttackSquare(loc)) {
 			rc.attackSquare(loc);
 			return true;
 		}

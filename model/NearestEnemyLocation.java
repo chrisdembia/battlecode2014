@@ -12,10 +12,12 @@ public class NearestEnemyLocation extends CacheVariable<MapLocation> {
 		super(m);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	protected MapLocation calculate() throws GameActionException {
 		int minDist = Integer.MAX_VALUE;
+		if (!m.existsNearbyEnemies()) return null;
+
 		MapLocation closestLoc = m.nearbyEnemyInfos.get()[0].location;
 		for (RobotInfo info : m.nearbyEnemyInfos.get()){
 			if (m.rc().getLocation().distanceSquaredTo(info.location) < minDist)
