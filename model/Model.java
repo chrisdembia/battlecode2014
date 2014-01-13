@@ -47,6 +47,24 @@ public class Model {
 	
 	public void invalidate() {
 		nearbyEnemies.invalidate();
+		myMissionAssignment.invalidate();
+	}
+	
+	/**
+	 * Convert map x, y coordinate to a linear index.
+	 * @param loc
+	 * @return
+	 */
+	public final int toLinear(final MapLocation loc) {
+		return loc.y * rc.getMapWidth() + loc.x;
+	}
+	
+	/**
+	 * Convert map linear index to x, y coordinate.
+	 */
+	public final MapLocation fromLinear(int loc) {
+		int y = loc / rc.getMapWidth();
+		return new MapLocation(y - rc.getMapWidth(), y);
 	}
 	
 	/**

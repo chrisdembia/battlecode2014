@@ -3,6 +3,7 @@
  */
 package team139.controller;
 
+import team139.actions.Attacker;
 import team139.actions.Spawner;
 import team139.model.MissionAssignment;
 import battlecode.common.Direction;
@@ -18,6 +19,7 @@ public class HQ extends Controller {
 
 	// TODO can these be static (instead)? if so, should they be?
 	private final Spawner spawner;
+	private final Attacker attacker;
 	
 	private static enum Strategy {
 		Dothraki,
@@ -33,6 +35,7 @@ public class HQ extends Controller {
 	public HQ(RobotController rc) {
 		super(rc);
 		this.spawner = new Spawner(rc);
+		this.attacker = new Attacker(rc);
 		this.strategy = determineStrategy();
 	}
 	
@@ -63,6 +66,13 @@ public class HQ extends Controller {
 					}
 				}
 			}
+			
+			/* TODO uncomment
+			if (model.existsNearbyAttackableEnemies()) {
+				attacker.attack(model.nearestEnemyLocation());
+			}
+			*/
+			
 			break;
 		default:
 			break;
