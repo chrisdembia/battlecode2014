@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package robotutils.planning;
+package team139.pathfinding;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -30,8 +30,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import robotutils.data.DoubleUtils;
-import robotutils.util.PriorityQueue;
 
 /**
  * This class implements the optimized D*-lite algorithm exactly as described

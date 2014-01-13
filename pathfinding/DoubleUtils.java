@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package robotutils.data;
+package team139.pathfinding;
 
 /**
  * This class determines the parameters of the floating point representation on
