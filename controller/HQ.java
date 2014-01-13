@@ -53,6 +53,8 @@ public class HQ extends Controller {
 				}
 			}
 			break;
+		default:
+			break;
 		}
 	}
 }
