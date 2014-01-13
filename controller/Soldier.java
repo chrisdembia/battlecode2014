@@ -3,6 +3,7 @@
  */
 package team139.controller;
 
+import java.util.List;
 import java.util.Random;
 
 import team139.actions.Attacker;
@@ -89,11 +90,20 @@ public class Soldier extends Controller {
 //						while (!rc.canMove(stepDirection)){
 //							stepDirection = stepDirection.rotateRight();
 //						}
-						pathplanner = new GridDStar(model.map, new IntCoord(rc.getLocation()), new IntCoord(model.enemyHQLocation));
-						while (!rc.getLocation().equals(model.enemyHQLocation)){
+						MapLocation goal = model.enemyHQLocation.add(Direction.NORTH);
+						pathplanner = new GridDStar(model.map,
+								new IntCoord(rc.getLocation()),
+								new IntCoord(goal));
+						while (!rc.getLocation().equals(goal)){
 							pathplanner.updateStart(new IntCoord(rc.getLocation()));
-							int[] nextStepCoords = pathplanner.plan().get(0).getInts();
+							List<IntCoord> path = pathplanner.plan();
+							System.out.println(path.toString());
+							if (path.isEmpty()) {
+								System.out.println("No path found.");
+							}
+							int[] nextStepCoords = path.get(1).getInts();
 							MapLocation nextStep = new MapLocation(nextStepCoords[0], nextStepCoords[1]);
+							rc.setIndicatorString(2, nextStep.toString());
 							mover.move(rc.getLocation().directionTo(nextStep));
 						}
 					}
@@ -143,10 +153,10 @@ public class Soldier extends Controller {
 //					mover.move(stepDirection);
 					
 					
-					pathplanner = new GridDStar(model.map, new IntCoord(rc.getLocation()), new IntCoord(model.enemyHQLocation));
-					while (!rc.getLocation().equals(model.enemyHQLocation)){
+					pathplanner = new GridDStar(model.map, new IntCoord(rc.getLocation()), new IntCoord(model.enemyHQLocation.add(Direction.NORTH)));
+					while (!rc.getLocation().equals(model.enemyHQLocation.add(Direction.NORTH))){
 						pathplanner.updateStart(new IntCoord(rc.getLocation()));
-						int[] nextStepCoords = pathplanner.plan().get(0).getInts();
+						int[] nextStepCoords = pathplanner.plan().get(1).getInts();
 						MapLocation nextStep = new MapLocation(nextStepCoords[0], nextStepCoords[1]);
 						mover.move(rc.getLocation().directionTo(nextStep));
 					}

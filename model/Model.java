@@ -135,14 +135,15 @@ public class Model {
 	public void buildStaticMap() {
 		TerrainTile tile;
 		for (int i=0; i<rc.getMapWidth(); i++){
-			for (int j=0; j<rc.getMapHeight(); i++){
+			for (int j=0; j<rc.getMapHeight(); j++){
+				rc.setIndicatorString(1, (String.valueOf(i) + ", " + String.valueOf(j)));
 				tile = rc.senseTerrainTile(new MapLocation(i,j));
 				switch (tile){
 				case VOID:
 					map.set((byte)255, i, j);
 					break;
 				case NORMAL:
-					map.set((byte)25, i, j);
+					map.set((byte)0, i, j);
 					break;
 				case ROAD:
 					map.set((byte)0, i, j);
