@@ -27,4 +27,5 @@ public class Util {
 		final int dy = loc0.y - loc1.y;
 		return (dx > 0 ? dx : -dx) + (dy > 0 ? dy : -dy);
 	}
+
 }

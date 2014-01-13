@@ -3,6 +3,7 @@
  */
 package team139.controller;
 
+import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 
 /**
@@ -22,9 +23,14 @@ public class PASTR extends Controller {
 	 * @see team139.controller.Controller#takeOneTurn()
 	 */
 	@Override
-	public void takeOneTurn() {
-		// TODO Auto-generated method stub
-
+	public void takeOneTurn() throws GameActionException {
+		
+		/* TODO
+		if (model.existsNearbyEnemies()) {
+			//PASTR
+		}
+		*/
 	}
+	
 
 }

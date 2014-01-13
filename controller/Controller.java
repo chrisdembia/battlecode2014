@@ -6,7 +6,6 @@ package team139.controller;
 import java.util.Random;
 
 import team139.model.Model;
-import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 
@@ -63,6 +62,7 @@ public abstract class Controller {
 	
 	protected void yield() {
 		rc.yield();
+		model.invalidate();
 	}
 	
 	// TODO prevent this method from being able to throw exceptions.
