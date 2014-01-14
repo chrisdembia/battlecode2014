@@ -42,6 +42,7 @@ public class Soldier extends Controller {
 	// AttackNearestPASTR useful variables
 	MapLocation pastrLocation = null;
 	RobotInfo pastrInfo;
+	MapLocation prevLocation = null;
 
 	private int id;
 
@@ -79,11 +80,20 @@ public class Soldier extends Controller {
 					else{
 					// Go to Enemy HQ
 						/// CRUDE PATHFINDING:
-						Direction stepDirection = rc.getLocation().directionTo(rc.senseEnemyHQLocation());
-						while (!rc.canMove(stepDirection)){
-							stepDirection = stepDirection.rotateRight();
+						Direction trueDirection = rc.getLocation().directionTo(rc.senseEnemyHQLocation());
+						Direction stepDirection = trueDirection;
+						while (!rc.canMove(stepDirection) || rc.getLocation().add(stepDirection).equals(prevLocation)){
+							if ((trueDirection.dx < 0 && trueDirection.dy < 0) || 
+								(trueDirection.dx > 0 && trueDirection.dy >0)){
+								stepDirection = stepDirection.rotateRight();
+							} else {
+								stepDirection = stepDirection.rotateLeft();
+							}
+							//nextStep = rc.getLocation().add(stepDirection);
 						}
-						mover.move(stepDirection);
+						if (mover.move(stepDirection)){ //This takes advantage of the fact that the move will not actually occur until later
+							prevLocation = rc.getLocation();
+						}
 					}
 					break;
 					
@@ -122,13 +132,20 @@ public class Soldier extends Controller {
 				// Go to nearest PASTR
 					/// CRUDE PATHFINDING:
 					//MapLocation nextStep;
-					Direction stepDirection = rc.getLocation().directionTo(pastrLocation);
-					//nextStep = rc.getLocation().add(stepDirection);
-					while (!rc.canMove(stepDirection)){
-						stepDirection = stepDirection.rotateRight();
+					Direction trueDirection = rc.getLocation().directionTo(pastrLocation);
+					Direction stepDirection = trueDirection;
+					while (!rc.canMove(stepDirection) || rc.getLocation().add(stepDirection).equals(prevLocation)){
+						if ((trueDirection.dx < 0 && trueDirection.dy < 0) || 
+								(trueDirection.dx > 0 && trueDirection.dy >0)){
+							stepDirection = stepDirection.rotateRight();
+						} else {
+							stepDirection = stepDirection.rotateLeft();
+						}
 						//nextStep = rc.getLocation().add(stepDirection);
 					}
-					mover.move(stepDirection);
+					if (mover.move(stepDirection)){ //This takes advantage of the fact that the move will not actually occur until later
+						prevLocation = rc.getLocation();
+					}
 //					while (!rc.isActive()){
 //						rc.yield();
 //					}
