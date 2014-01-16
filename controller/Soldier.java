@@ -32,6 +32,7 @@ public class Soldier extends Controller {
 	public static enum Mission {
 		Sentry,
 		AttackNearestPASTR,
+		NoiseTowerBuilder,
 		PASTRBuilder,
 		HerderDefender,
 		ExamplePlayer,
@@ -42,6 +43,8 @@ public class Soldier extends Controller {
 	// AttackNearestPASTR useful variables
 	MapLocation pastrLocation = null;
 	RobotInfo pastrInfo;
+	
+	MapLocation prevLocation = null;
 
 	private int id;
 
@@ -80,10 +83,13 @@ public class Soldier extends Controller {
 					// Go to Enemy HQ
 						/// CRUDE PATHFINDING:
 						Direction stepDirection = rc.getLocation().directionTo(rc.senseEnemyHQLocation());
-						while (!rc.canMove(stepDirection)){
+						while (!rc.canMove(stepDirection) || rc.getLocation().add(stepDirection).equals(prevLocation)){
 							stepDirection = stepDirection.rotateRight();
 						}
-						mover.move(stepDirection);
+						
+						if (mover.move(stepDirection)){
+							prevLocation = rc.getLocation();
+						}
 					}
 					break;
 					
@@ -124,11 +130,13 @@ public class Soldier extends Controller {
 					//MapLocation nextStep;
 					Direction stepDirection = rc.getLocation().directionTo(pastrLocation);
 					//nextStep = rc.getLocation().add(stepDirection);
-					while (!rc.canMove(stepDirection)){
+					while (!rc.canMove(stepDirection)  || rc.getLocation().add(stepDirection).equals(prevLocation)){
 						stepDirection = stepDirection.rotateRight();
 						//nextStep = rc.getLocation().add(stepDirection);
 					}
-					mover.move(stepDirection);
+					if (mover.move(stepDirection)){
+						prevLocation = rc.getLocation();
+					}
 //					while (!rc.isActive()){
 //						rc.yield();
 //					}
@@ -167,8 +175,12 @@ public class Soldier extends Controller {
 			break;
 		case HerderDefender:
 			break;
+		case NoiseTowerBuilder:
+			rc.construct(RobotType.NOISETOWER);
+			while(true) yield();
 		case PASTRBuilder:
-			break;
+			rc.construct(RobotType.PASTR);
+			while(true) yield();
 		default:
 			break;
 		}

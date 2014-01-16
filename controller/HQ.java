@@ -10,6 +10,7 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
+import battlecode.common.Robot;
 import battlecode.common.RobotController;
 
 /**
@@ -40,7 +41,9 @@ public class HQ extends Controller {
 	}
 	
 	private Strategy determineStrategy() {
-		return Strategy.Dothraki;
+//		return Strategy.Dothraki;
+		return Strategy.Murica;
+
 	}
 
 	/* (non-Javadoc)
@@ -74,8 +77,42 @@ public class HQ extends Controller {
 			*/
 			
 			break;
+		case Murica:
+			rc.setIndicatorString(1, "Making NoiseTowerBuilder");
+			while (!spawnAndAssignSoldier(Direction.NORTH, Soldier.Mission.NoiseTowerBuilder)) yield();
+			yield();
+			rc.setIndicatorString(1, "Making PASTRBuilder");
+			while (!spawnAndAssignSoldier(Direction.NORTH_EAST, Soldier.Mission.PASTRBuilder)) yield();
+			rc.setIndicatorString(1, "Defending");
+			defendIndefinitely();
+			
+			break;
 		default:
 			break;
 		}
+	}
+	
+	private void defendIndefinitely() throws GameActionException {
+		while (true){
+			if (model.existsNearbyEnemies()){
+				attacker.attack(model.nearestEnemyLocation.get());
+			}
+			yield();
+		}
+		
+	}
+
+	private boolean spawnAndAssignSoldier(Direction dir, Soldier.Mission mission) throws GameActionException{
+		if (model.canSpawnInDirection(dir)) { 
+			if (!spawner.spawn(dir)) return false;
+			MapLocation newlySpawned = rc.getLocation().add(dir);
+			yield();
+			Robot newBot = (Robot) rc.senseObjectAtLocation(newlySpawned);
+			if (newBot != null) {
+				MissionAssignment.broadcast(rc, newBot.getID(), mission);
+			}
+			return true;
+		}
+		return false;
 	}
 }
