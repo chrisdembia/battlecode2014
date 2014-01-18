@@ -56,18 +56,7 @@ public class HQ extends Controller {
 		case Dothraki:
 			if (rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
 				Direction dir = model.directionToEnemyHQ();
-				if (model.canSpawnInDirection(dir)) { 
-					spawner.spawn(dir);
-					MapLocation newlySpawned = rc.getLocation().add(dir);
-					yield();
-					if (rc.senseObjectAtLocation(newlySpawned) != null) {
-						// TODO not the exact check we want but it should
-						// suffice.
-						MissionAssignment.broadcast(rc,
-								rc.senseObjectAtLocation(newlySpawned).getID(),
-								Soldier.Mission.AttackNearestPASTR);
-					}
-				}
+				spawnAndAssignSoldier(dir, Soldier.Mission.AttackNearestPASTR);
 			}
 			
 			/* TODO uncomment
@@ -95,7 +84,35 @@ public class HQ extends Controller {
 	private void defendIndefinitely() throws GameActionException {
 		while (true){
 			if (model.existsNearbyEnemies()){
+				rc.setIndicatorString(1, "I see an enemy!");
+				while (!rc.isActive()) {
+					rc.setIndicatorString(2, "Waiting for an active round!");
+					yield();
+					if (!model.existsNearbyEnemies()) {
+						rc.setIndicatorString(1, "No longer any enemies.4");
+						continue;
+					}
+				}
 				attacker.attack(model.nearestEnemyLocation.get());
+				yield();
+				continue;
+			}
+			else{
+				rc.setIndicatorString(1, "No Nearby Enemies");
+			}
+			//Make sure PASTR exists
+			if (rc.senseObjectAtLocation(rc.getLocation().add(Direction.NORTH_EAST)) == null){
+				while (!spawnAndAssignSoldier(Direction.NORTH_EAST, Soldier.Mission.PASTRBuilder));
+				continue;
+			}
+			//Make sure Noise Tower Exists
+			if (rc.senseObjectAtLocation(rc.getLocation().add(Direction.NORTH)) == null){
+				while (!spawnAndAssignSoldier(Direction.NORTH, Soldier.Mission.NoiseTowerBuilder));
+				continue;
+			}
+			//Try to build more offensive Soldiers
+			if (rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
+				spawnAndAssignSoldier(Direction.SOUTH, Soldier.Mission.AttackNearestPASTR);
 			}
 			yield();
 		}

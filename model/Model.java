@@ -9,6 +9,7 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
+import battlecode.common.RobotType;
 import battlecode.common.Team;
 
 /**
@@ -22,6 +23,8 @@ public class Model {
 	// TODO make this static?
 	private final RobotController rc;
 	public final Team opponent;
+	public MapLocation enemyHQLocation;
+
 	
 	// Cache variables.
 	// =======================================================================
@@ -37,6 +40,7 @@ public class Model {
 		this.myMissionAssignment = new MissionAssignmentCache(this);
 		this.nearbyEnemyInfos = new NearbyEnemyInfos(this);
 		this.nearestEnemyLocation = new NearestEnemyLocation(this);
+		this.enemyHQLocation = rc.senseEnemyHQLocation();
 	}
 	
 	public final RobotController rc() {
@@ -88,6 +92,18 @@ public class Model {
 		// Location loc = rc.getLocation().add(dir)
 		// if rc.canSenseSquare(loc) { ...
 		return rc.senseObjectAtLocation(rc.getLocation().add(dir)) == null;
+	}
+	
+	/**
+	 * Returns whether a soldier can move in the direction (accounts for occupied or too close to HQ)
+	 */
+	public boolean canMoveInDirection(Direction dir){
+		if (!rc.canMove(dir)) return false;
+		
+		MapLocation stepLoc = rc.getLocation().add(dir);
+		if (stepLoc.distanceSquaredTo(enemyHQLocation) <= RobotType.HQ.attackRadiusMaxSquared) return false;
+		
+		return true;
 	}
 
 	/**

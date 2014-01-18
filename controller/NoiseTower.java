@@ -43,7 +43,7 @@ public class NoiseTower extends Controller {
 	 */
 	public NoiseTower(RobotController rc) {
 		super(rc);
-		mission = Mission.Puller;
+		mission = Mission.Spiraller;
 		pastrLocation = rc.getLocation().add(Direction.EAST);
 	}
 

@@ -44,8 +44,12 @@ public class Soldier extends Controller {
 	MapLocation pastrLocation = null;
 	RobotInfo pastrInfo;
 	
+	//Pathfinding variables
 	MapLocation prevLocation = null;
-
+	private boolean avoidingObstacle = false;
+	private int initialDistFromDest = 0;
+	private Direction currentDirection; 
+	
 	private int id;
 
 	/**
@@ -82,20 +86,21 @@ public class Soldier extends Controller {
 					else{
 					// Go to Enemy HQ
 						/// CRUDE PATHFINDING:
-						Direction stepDirection = rc.getLocation().directionTo(rc.senseEnemyHQLocation());
-						while (!rc.canMove(stepDirection) || rc.getLocation().add(stepDirection).equals(prevLocation)){
-							stepDirection = stepDirection.rotateRight();
-						}
-						
-						if (mover.move(stepDirection)){
-							prevLocation = rc.getLocation();
-						}
+						goToLocation(model.enemyHQLocation);
+//						Direction stepDirection = rc.getLocation().directionTo(rc.senseEnemyHQLocation());
+//						while (!model.canMoveInDirection(stepDirection) || rc.getLocation().add(stepDirection).equals(prevLocation)){
+//							stepDirection = stepDirection.rotateRight();
+//						}
+//						
+//						if (mover.move(stepDirection)){
+//							prevLocation = rc.getLocation();
+//						}
 					}
 					break;
 					
 				}
 			}
-			System.out.println(pastrLocation.toString());
+			//System.out.println(pastrLocation.toString());
 			if (rc.canAttackSquare(pastrLocation)){
 				// If yes, 
 				//Does it have more than PASTR_ATTACK_THRESH hp?
@@ -128,15 +133,18 @@ public class Soldier extends Controller {
 				// Go to nearest PASTR
 					/// CRUDE PATHFINDING:
 					//MapLocation nextStep;
-					Direction stepDirection = rc.getLocation().directionTo(pastrLocation);
-					//nextStep = rc.getLocation().add(stepDirection);
-					while (!rc.canMove(stepDirection)  || rc.getLocation().add(stepDirection).equals(prevLocation)){
-						stepDirection = stepDirection.rotateRight();
-						//nextStep = rc.getLocation().add(stepDirection);
-					}
-					if (mover.move(stepDirection)){
-						prevLocation = rc.getLocation();
-					}
+					goToLocation(pastrLocation);
+					
+//					Direction stepDirection = rc.getLocation().directionTo(pastrLocation);
+//					//nextStep = rc.getLocation().add(stepDirection);
+//					while (!model.canMoveInDirection(stepDirection)  || rc.getLocation().add(stepDirection).equals(prevLocation)){
+//						stepDirection = stepDirection.rotateRight();
+//						//nextStep = rc.getLocation().add(stepDirection);
+//					}
+//					if (mover.move(stepDirection)){
+//						prevLocation = rc.getLocation();
+//					}
+					
 //					while (!rc.isActive()){
 //						rc.yield();
 //					}
@@ -190,13 +198,55 @@ public class Soldier extends Controller {
 	private MapLocation getNearestPastrLocation() throws GameActionException {
 		MapLocation[] allLocations = this.rc.sensePastrLocations(this.model.opponent);
 		if (allLocations.length == 0) return null;
-		double minDist = 9999999;
+		double minDist = Integer.MAX_VALUE;
 		MapLocation returnLoc = allLocations[0];
 		for (MapLocation loc : allLocations){
 			if (rc.getLocation().distanceSquaredTo(loc) < minDist)
 				returnLoc = loc;
 		}
 		return returnLoc;
+	}
+	
+
+	
+	private boolean goToLocation(MapLocation dest) throws GameActionException{
+
+		if (rc.getLocation().equals(dest)) return true;
+		if (!rc.isActive()) return false;
+		yield();
+		rc.setIndicatorString(2, "");
+		if (currentDirection == null) currentDirection = rc.getLocation().directionTo(dest);
+		
+		if (!avoidingObstacle){ 
+			currentDirection  = rc.getLocation().directionTo(dest);
+			if (!model.canMoveInDirection(currentDirection)){
+				avoidingObstacle = true;
+				initialDistFromDest = rc.getLocation().distanceSquaredTo(dest);
+				rc.setIndicatorString(2, "Found an obstacle, setting avoidingObstacle");
+			}
+		}
+
+		if (avoidingObstacle){  //Not an else so that it can happen when entering avoidingObstacle mode
+			if (rc.getLocation().distanceSquaredTo(dest) < initialDistFromDest){
+				avoidingObstacle = false;
+				currentDirection = rc.getLocation().directionTo(dest);
+			} 
+			rc.setIndicatorString(2, "Checking if I can move");
+			while (!model.canMoveInDirection(currentDirection)){
+				currentDirection = currentDirection.rotateRight();
+			}
+			//Make sure I'm following the wall on my left side
+			Direction leftDir = currentDirection.rotateLeft().rotateLeft();
+			if (model.canMoveInDirection(leftDir)){
+				currentDirection = leftDir;
+			}
+			rc.setIndicatorString(2, "Found good direction: "+currentDirection.toString());
+		}
+		
+		rc.setIndicatorString(0, "Moving in direction "+currentDirection.toString());
+		rc.setIndicatorString(1, "avoidingObstacle: "+(avoidingObstacle ? "true" : "false"));
+		mover.move(currentDirection);
+		return false;
 	}
 
 	private void determineMission() throws GameActionException {
